@@ -1,8 +1,8 @@
-package kr.hs.dgsw.flow.network;
+package kr.hs.dgsw.flow.network.Model.RegisterModel;
 
-public class DTO {
-    String state;
-    String message;
+public class RegisterResponseBody {
+    private String state;
+    private String message;
 
     public String getState() {
         return state;

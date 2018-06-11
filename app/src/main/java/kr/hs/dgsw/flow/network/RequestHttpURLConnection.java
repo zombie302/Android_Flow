@@ -2,12 +2,13 @@ package kr.hs.dgsw.flow.network;
 
 import android.util.Log;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import kr.hs.dgsw.flow.network.Model.RegisterModel.RegisterRequestBody;
+import kr.hs.dgsw.flow.network.Model.RegisterModel.RegisterResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,38 +30,29 @@ public class RequestHttpURLConnection {
         networkService = retrofit.create(NetworkService.class);
     }
 
-    public JSONObject signup(String email, String pw, String name, String gender, String mobile, String class_idx, String class_number, final RetroCallBack retroCallBack){
+    public JSONObject signup(String email, String pw, String name, String gender, String mobile, String class_idx, String class_number){
         try {
 
             pw = getHashCodeFromString(pw);
 
-            final JSONObject jsonObject = new JSONObject();
-            jsonObject.put("email", email);
-            jsonObject.put("pw", pw);
-            jsonObject.put("name", name);
-            jsonObject.put("gender", gender);
-            jsonObject.put("mobile", mobile);
-            jsonObject.put("class_idx", class_idx);
-            jsonObject.put("class_number", class_number);
+            RegisterRequestBody registerRequestBody = new RegisterRequestBody(email, pw, name, gender, mobile, Integer.parseInt(class_idx), Integer.parseInt(class_number));
 
-            Call<JSONObject> call = networkService.signup(jsonObject);
+            Call<RegisterResponseBody> call = networkService.signup(registerRequestBody);
 
-            call.enqueue(new Callback<JSONObject>() {
+            call.enqueue(new Callback<RegisterResponseBody>() {
+
                 @Override
-                public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
-                    JSONObject jsonObjects = response.body();
-                    Log.i("network Test", jsonObjects.toString());
+                public void onResponse(Call<RegisterResponseBody> call, Response<RegisterResponseBody> response) {
+                    Log.i("register", response.toString());
                 }
 
                 @Override
-                public void onFailure(Call<JSONObject> call, Throwable t) {
-                    Log.i("network Test", "실패");
+                public void onFailure(Call<RegisterResponseBody> call, Throwable t) {
+
                 }
             });
 
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
             e.printStackTrace();
         }
         return jsonObject;

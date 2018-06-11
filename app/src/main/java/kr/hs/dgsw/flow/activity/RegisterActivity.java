@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -12,10 +11,9 @@ import android.widget.Toast;
 
 import kr.hs.dgsw.flow.R;
 import kr.hs.dgsw.flow.network.RequestHttpURLConnection;
-import kr.hs.dgsw.flow.network.RetroCallBack;
 import kr.hs.dgsw.flow.util.Validation;
 
-public class RegisterActivity extends AppCompatActivity implements RetroCallBack{
+public class RegisterActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,27 +54,10 @@ public class RegisterActivity extends AppCompatActivity implements RetroCallBack
                 spinner_gender.getSelectedItem().toString(),
                 et_phonenum.getText().toString(),
                 spinner_class_idx.getSelectedItem().toString(),
-                spinner_class_num.getSelectedItem().toString(),
-                this
+                spinner_class_num.getSelectedItem().toString()
         );
 
         Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(i);
-    }
-
-    @Override
-    public void onError(Throwable t) {
-        Toast.makeText(this, "통신 오류", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onSuccess(int code, Object receivedData) {
-        Toast.makeText(this, "회원가입 성공" + code, Toast.LENGTH_LONG).show();
-        Log.i("receiveData", receivedData.toString());
-    }
-
-    @Override
-    public void onFailure(int code) {
-        Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show();
     }
 }

@@ -2,6 +2,8 @@ package kr.hs.dgsw.flow.network;
 
 import org.json.JSONObject;
 
+import kr.hs.dgsw.flow.network.Model.RegisterModel.RegisterRequestBody;
+import kr.hs.dgsw.flow.network.Model.RegisterModel.RegisterResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
@@ -14,6 +16,6 @@ public interface NetworkService {
     Call<JSONObject> signin(JSONObject jsonObject);
 
     @POST("auth/signup")
-    Call<JSONObject> signup(@Body JSONObject jsonObject);
+    Call<RegisterResponseBody> signup(@Body RegisterRequestBody registerRequestBody);
 
 }

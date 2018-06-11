@@ -1,14 +1,14 @@
 package kr.hs.dgsw.flow.network.Model.RegisterModel;
 
 public class RegisterResponseBody {
-    private String state;
+    private int state;
     private String message;
 
-    public String getState() {
+    public int getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(int state) {
         this.state = state;
     }
 

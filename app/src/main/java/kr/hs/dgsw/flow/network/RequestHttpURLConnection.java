@@ -7,6 +7,8 @@ import org.json.JSONObject;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import kr.hs.dgsw.flow.network.Model.LoginModel.LoginRequestBody;
+import kr.hs.dgsw.flow.network.Model.LoginModel.LoginResponseBody;
 import kr.hs.dgsw.flow.network.Model.RegisterModel.RegisterRequestBody;
 import kr.hs.dgsw.flow.network.Model.RegisterModel.RegisterResponseBody;
 import retrofit2.Call;
@@ -30,7 +32,8 @@ public class RequestHttpURLConnection {
         networkService = retrofit.create(NetworkService.class);
     }
 
-    public JSONObject signup(String email, String pw, String name, String gender, String mobile, String class_idx, String class_number){
+    public RegisterResponseBody signup(String email, String pw, String name, String gender, String mobile, String class_idx, String class_number){
+        final RegisterResponseBody registerResponseBody = new RegisterResponseBody();
         try {
 
             pw = getHashCodeFromString(pw);
@@ -38,12 +41,13 @@ public class RequestHttpURLConnection {
             RegisterRequestBody registerRequestBody = new RegisterRequestBody(email, pw, name, gender, mobile, Integer.parseInt(class_idx), Integer.parseInt(class_number));
 
             Call<RegisterResponseBody> call = networkService.signup(registerRequestBody);
-
             call.enqueue(new Callback<RegisterResponseBody>() {
 
                 @Override
                 public void onResponse(Call<RegisterResponseBody> call, Response<RegisterResponseBody> response) {
                     Log.i("register", response.toString());
+                    registerResponseBody.setState(response.body().getState());
+                    registerResponseBody.setMessage(response.body().getMessage());
                 }
 
                 @Override
@@ -55,17 +59,34 @@ public class RequestHttpURLConnection {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return jsonObject;
+        return registerResponseBody;
     }
 
-    public String signin(String email, String pw){
+    public LoginResponseBody signin(String email, String pw){
+        final LoginResponseBody loginResponseBody = new LoginResponseBody();
         try {
             pw = getHashCodeFromString(pw);
-//            response = networkService.signin(email, pw);
+            LoginRequestBody loginRequestBody = new LoginRequestBody(email, pw);
+
+            Call<LoginResponseBody> call = networkService.signin(loginRequestBody);
+            call.enqueue(new Callback<LoginResponseBody>() {
+                @Override
+                public void onResponse(Call<LoginResponseBody> call, Response<LoginResponseBody> response) {
+                    loginResponseBody.setStatus(response.body().getStatus());
+                    loginResponseBody.setMessage(response.body().getMessage());
+                    loginResponseBody.setData(response.body().getData());
+                }
+
+                @Override
+                public void onFailure(Call<LoginResponseBody> call, Throwable t) {
+
+                }
+            });
+
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return /*response.toString()*/ "";
+        return loginResponseBody;
     }
 
     private String getHashCodeFromString(String str) throws NoSuchAlgorithmException {

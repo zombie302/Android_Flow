@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import kr.hs.dgsw.flow.R;
+import kr.hs.dgsw.flow.network.Model.RegisterModel.RegisterResponseBody;
 import kr.hs.dgsw.flow.network.RequestHttpURLConnection;
 import kr.hs.dgsw.flow.util.Validation;
 
@@ -47,7 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         RequestHttpURLConnection rhu = new RequestHttpURLConnection();
-        rhu.signup(
+        RegisterResponseBody registerResponseBody = rhu.signup(
                 et_email.getText().toString(),
                 et_password.getText().toString(),
                 et_name.getText().toString(),
@@ -57,7 +58,11 @@ public class RegisterActivity extends AppCompatActivity {
                 spinner_class_num.getSelectedItem().toString()
         );
 
-        Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
-        startActivity(i);
+        if(registerResponseBody.getState() == 200){
+            Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(i);
+        } else {
+            Toast.makeText(this, "회원가입에 실패함", Toast.LENGTH_SHORT).show();
+        }
     }
 }

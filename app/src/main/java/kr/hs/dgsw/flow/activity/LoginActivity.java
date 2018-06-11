@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import kr.hs.dgsw.flow.R;
+import kr.hs.dgsw.flow.network.Model.LoginModel.LoginResponseBody;
 import kr.hs.dgsw.flow.network.RequestHttpURLConnection;
 
 public class LoginActivity extends AppCompatActivity{
@@ -25,6 +26,6 @@ public class LoginActivity extends AppCompatActivity{
 
     public void onClickLoginBtn(View v){
         RequestHttpURLConnection rhc = new RequestHttpURLConnection();
-        rhc.signin(id.toString(), pw.toString());
+        LoginResponseBody loginResponseBody = rhc.signin(id.toString(), pw.toString());
     }
 }

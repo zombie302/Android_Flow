@@ -2,8 +2,6 @@ package kr.hs.dgsw.flow.network;
 
 import android.util.Log;
 
-import org.json.JSONObject;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -21,7 +19,6 @@ public class RequestHttpURLConnection {
     private String urlStr = "http://flow.cafe24app.com/";
     Retrofit retrofit;
     NetworkService networkService;
-    JSONObject jsonObject;
 
     public RequestHttpURLConnection() {
         retrofit = new Retrofit.Builder()
@@ -33,7 +30,7 @@ public class RequestHttpURLConnection {
     }
 
     public RegisterResponseBody signup(String email, String pw, String name, String gender, String mobile, String class_idx, String class_number){
-        final RegisterResponseBody registerResponseBody = new RegisterResponseBody();
+        RegisterResponseBody registerResponseBody = new RegisterResponseBody();
         try {
 
             pw = getHashCodeFromString(pw);
@@ -45,8 +42,9 @@ public class RequestHttpURLConnection {
 
                 @Override
                 public void onResponse(Call<RegisterResponseBody> call, Response<RegisterResponseBody> response) {
-                    Log.i("register", response.toString());
-                    registerResponseBody.setState(response.body().getState());
+                    Log.i("register", String.valueOf(response.body().getStatus()));
+                    Log.i("register", response.body().getMessage());
+                    registerResponseBody.setStatus(response.body().getStatus());
                     registerResponseBody.setMessage(response.body().getMessage());
                 }
 
@@ -63,7 +61,7 @@ public class RequestHttpURLConnection {
     }
 
     public LoginResponseBody signin(String email, String pw){
-        final LoginResponseBody loginResponseBody = new LoginResponseBody();
+        LoginResponseBody loginResponseBody = new LoginResponseBody();
         try {
             pw = getHashCodeFromString(pw);
             LoginRequestBody loginRequestBody = new LoginRequestBody(email, pw);
@@ -72,6 +70,7 @@ public class RequestHttpURLConnection {
             call.enqueue(new Callback<LoginResponseBody>() {
                 @Override
                 public void onResponse(Call<LoginResponseBody> call, Response<LoginResponseBody> response) {
+                    Log.i("Login", response.toString());
                     loginResponseBody.setStatus(response.body().getStatus());
                     loginResponseBody.setMessage(response.body().getMessage());
                     loginResponseBody.setData(response.body().getData());

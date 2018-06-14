@@ -4,18 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import kr.hs.dgsw.flow.R;
+import kr.hs.dgsw.flow.RegisterInterface;
 import kr.hs.dgsw.flow.network.Model.RegisterModel.RegisterResponseBody;
 import kr.hs.dgsw.flow.network.RequestHttpURLConnection;
 import kr.hs.dgsw.flow.util.Validation;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements RegisterInterface{
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,18 +49,20 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         RequestHttpURLConnection rhu = new RequestHttpURLConnection();
-        RegisterResponseBody registerResponseBody = rhu.signup(
+        rhu.signup(
                 et_email.getText().toString(),
                 et_password.getText().toString(),
                 et_name.getText().toString(),
                 spinner_gender.getSelectedItem().toString(),
                 et_phonenum.getText().toString(),
                 spinner_class_idx.getSelectedItem().toString(),
-                spinner_class_num.getSelectedItem().toString()
+                spinner_class_num.getSelectedItem().toString(),
+                this
         );
+    }
 
-        Log.i("test", String.valueOf(registerResponseBody.getStatus()));
-
+    @Override
+    public void register(RegisterResponseBody registerResponseBody) {
         if(registerResponseBody.getStatus() == 200){
             Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(i);

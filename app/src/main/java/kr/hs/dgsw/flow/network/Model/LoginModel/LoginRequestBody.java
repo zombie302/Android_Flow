@@ -4,9 +4,13 @@ public class LoginRequestBody {
     private String email;
     private String pw;
 
-    public LoginRequestBody(String email, String pw) {
+    //firebase token
+    private String registration_token;
+
+    public LoginRequestBody(String email, String pw, String token) {
         this.email = email;
         this.pw = pw;
+        this.registration_token = token;
     }
 
     public String getEmail() {
@@ -23,5 +27,13 @@ public class LoginRequestBody {
 
     public void setPw(String pw) {
         this.pw = pw;
+    }
+
+    public String getToken() {
+        return registration_token;
+    }
+
+    public void setToken(String token) {
+        this.registration_token = token;
     }
 }

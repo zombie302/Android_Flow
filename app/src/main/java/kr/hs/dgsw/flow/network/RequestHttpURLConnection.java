@@ -2,9 +2,13 @@ package kr.hs.dgsw.flow.network;
 
 import android.util.Log;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import kr.hs.dgsw.flow.LoginInterface;
+import kr.hs.dgsw.flow.RegisterInterface;
 import kr.hs.dgsw.flow.network.Model.LoginModel.LoginRequestBody;
 import kr.hs.dgsw.flow.network.Model.LoginModel.LoginResponseBody;
 import kr.hs.dgsw.flow.network.Model.RegisterModel.RegisterRequestBody;
@@ -17,6 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RequestHttpURLConnection {
     private String urlStr = "http://flow.cafe24app.com/";
+
     Retrofit retrofit;
     NetworkService networkService;
 
@@ -29,10 +34,9 @@ public class RequestHttpURLConnection {
         networkService = retrofit.create(NetworkService.class);
     }
 
-    public RegisterResponseBody signup(String email, String pw, String name, String gender, String mobile, String class_idx, String class_number){
+    public RegisterResponseBody signup(String email, String pw, String name, String gender, String mobile, String class_idx, String class_number, final RegisterInterface registerInterface){
         RegisterResponseBody registerResponseBody = new RegisterResponseBody();
         try {
-
             pw = getHashCodeFromString(pw);
 
             RegisterRequestBody registerRequestBody = new RegisterRequestBody(email, pw, name, gender, mobile, Integer.parseInt(class_idx), Integer.parseInt(class_number));
@@ -42,10 +46,7 @@ public class RequestHttpURLConnection {
 
                 @Override
                 public void onResponse(Call<RegisterResponseBody> call, Response<RegisterResponseBody> response) {
-                    Log.i("register", String.valueOf(response.body().getStatus()));
-                    Log.i("register", response.body().getMessage());
-                    registerResponseBody.setStatus(response.body().getStatus());
-                    registerResponseBody.setMessage(response.body().getMessage());
+                    registerInterface.register(response.body());
                 }
 
                 @Override
@@ -60,20 +61,17 @@ public class RequestHttpURLConnection {
         return registerResponseBody;
     }
 
-    public LoginResponseBody signin(String email, String pw){
+    public LoginResponseBody signin(String email, String pw, final LoginInterface loginInterface){
         LoginResponseBody loginResponseBody = new LoginResponseBody();
         try {
             pw = getHashCodeFromString(pw);
-            LoginRequestBody loginRequestBody = new LoginRequestBody(email, pw);
-
+            LoginRequestBody loginRequestBody = new LoginRequestBody(email, pw, FirebaseInstanceId.getInstance().getToken());
+            Log.i("firebase token", FirebaseInstanceId.getInstance().getToken());
             Call<LoginResponseBody> call = networkService.signin(loginRequestBody);
             call.enqueue(new Callback<LoginResponseBody>() {
                 @Override
                 public void onResponse(Call<LoginResponseBody> call, Response<LoginResponseBody> response) {
-                    Log.i("Login", response.toString());
-                    loginResponseBody.setStatus(response.body().getStatus());
-                    loginResponseBody.setMessage(response.body().getMessage());
-                    loginResponseBody.setData(response.body().getData());
+                    loginInterface.Login(response.body());
                 }
 
                 @Override

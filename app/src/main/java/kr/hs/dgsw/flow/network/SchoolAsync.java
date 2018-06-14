@@ -11,7 +11,7 @@ import java.util.List;
 import kr.hs.dgsw.flow.SchoolMealI;
 
 public class SchoolAsync extends AsyncTask{
-    public SchoolMealI delegate = null;
+    private SchoolMealI delegate = null;
     private List<SchoolMenu> menu;
     private int year;
     private int month;

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -64,6 +65,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
     @Override
     public void register(RegisterResponseBody registerResponseBody) {
         if(registerResponseBody.getStatus() == 200){
+            Log.i("register", registerResponseBody.getMessage());
             Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(i);
         } else {

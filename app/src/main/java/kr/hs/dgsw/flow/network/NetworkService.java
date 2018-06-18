@@ -11,7 +11,8 @@ import retrofit2.http.POST;
 
 public interface NetworkService {
 
-    @Headers("content-type: application/json")
+    @Headers({"Content-Type: application/json"})
+
     @POST("auth/signin")
     Call<LoginResponseBody> signin(@Body LoginRequestBody loginRequestBody);
 

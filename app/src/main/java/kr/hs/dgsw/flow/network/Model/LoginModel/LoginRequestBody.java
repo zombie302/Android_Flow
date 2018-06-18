@@ -1,16 +1,15 @@
 package kr.hs.dgsw.flow.network.Model.LoginModel;
 
 public class LoginRequestBody {
+
     private String email;
     private String pw;
-
-    //firebase token
     private String registration_token;
 
-    public LoginRequestBody(String email, String pw, String token) {
+    public LoginRequestBody(String email, String pw, String registration_token) {
         this.email = email;
         this.pw = pw;
-        this.registration_token = token;
+        this.registration_token = registration_token;
     }
 
     public String getEmail() {
@@ -29,11 +28,11 @@ public class LoginRequestBody {
         this.pw = pw;
     }
 
-    public String getToken() {
+    public String getRegistration_token() {
         return registration_token;
     }
 
-    public void setToken(String token) {
-        this.registration_token = token;
+    public void setRegistration_token(String registration_token) {
+        this.registration_token = registration_token;
     }
 }

@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity implements LoginInterface{
 
     public void onClickLoginBtn(View v){
         RequestHttpURLConnection rhc = new RequestHttpURLConnection();
-        rhc.signin(id.toString(), pw.toString(), this);
+        rhc.signin(id.getText().toString(), pw.getText().toString(), this);
     }
 
     @Override

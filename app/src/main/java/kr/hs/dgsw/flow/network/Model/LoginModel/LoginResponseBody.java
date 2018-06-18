@@ -5,10 +5,6 @@ public class LoginResponseBody {
     private String message;
     private ResponseData data;
 
-    public LoginResponseBody(){
-
-    }
-
     public LoginResponseBody(int status, String message, ResponseData data) {
         this.status = status;
         this.message = message;

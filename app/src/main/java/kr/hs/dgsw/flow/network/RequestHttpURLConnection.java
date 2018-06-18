@@ -22,8 +22,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RequestHttpURLConnection {
     private String urlStr = "http://flow.cafe24app.com/";
 
-    Retrofit retrofit;
-    NetworkService networkService;
+    private Retrofit retrofit;
+    private NetworkService networkService;
 
     public RequestHttpURLConnection() {
         retrofit = new Retrofit.Builder()
@@ -34,56 +34,65 @@ public class RequestHttpURLConnection {
         networkService = retrofit.create(NetworkService.class);
     }
 
-    public RegisterResponseBody signup(String email, String pw, String name, String gender, String mobile, String class_idx, String class_number, final RegisterInterface registerInterface){
-        RegisterResponseBody registerResponseBody = new RegisterResponseBody();
+    public void signup(String email, String pw, String name, String gender, String mobile, String class_idx, String class_number, final RegisterInterface registerInterface){
         try {
             pw = getHashCodeFromString(pw);
-
-            RegisterRequestBody registerRequestBody = new RegisterRequestBody(email, pw, name, gender, mobile, Integer.parseInt(class_idx), Integer.parseInt(class_number));
-
-            Call<RegisterResponseBody> call = networkService.signup(registerRequestBody);
-            call.enqueue(new Callback<RegisterResponseBody>() {
-
-                @Override
-                public void onResponse(Call<RegisterResponseBody> call, Response<RegisterResponseBody> response) {
-                    registerInterface.register(response.body());
-                }
-
-                @Override
-                public void onFailure(Call<RegisterResponseBody> call, Throwable t) {
-
-                }
-            });
-
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return registerResponseBody;
+        //Log.i("register pw", pw);
+        RegisterRequestBody registerRequestBody = new RegisterRequestBody(email, pw, name, gender, mobile, Integer.parseInt(class_idx), Integer.parseInt(class_number));
+
+        Call<RegisterResponseBody> call = networkService.signup(registerRequestBody);
+        call.enqueue(new Callback<RegisterResponseBody>() {
+
+            @Override
+            public void onResponse(Call<RegisterResponseBody> call, Response<RegisterResponseBody> response) {
+                registerInterface.register(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<RegisterResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 
-    public LoginResponseBody signin(String email, String pw, final LoginInterface loginInterface){
-        LoginResponseBody loginResponseBody = new LoginResponseBody();
+    public void signin(String email, String pw, final LoginInterface loginInterface){
         try {
             pw = getHashCodeFromString(pw);
-            LoginRequestBody loginRequestBody = new LoginRequestBody(email, pw, FirebaseInstanceId.getInstance().getToken());
-            Log.i("firebase token", FirebaseInstanceId.getInstance().getToken());
-            Call<LoginResponseBody> call = networkService.signin(loginRequestBody);
-            call.enqueue(new Callback<LoginResponseBody>() {
-                @Override
-                public void onResponse(Call<LoginResponseBody> call, Response<LoginResponseBody> response) {
-                    loginInterface.Login(response.body());
-                }
-
-                @Override
-                public void onFailure(Call<LoginResponseBody> call, Throwable t) {
-
-                }
-            });
-
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return loginResponseBody;
+
+        //Log.i("login pw", pw);
+
+        LoginRequestBody loginRequestBody = new LoginRequestBody(email, pw, FirebaseInstanceId.getInstance().getToken());
+
+
+        //debug
+        Log.i("login test", email + pw);
+
+        String emailTest = loginRequestBody.getEmail();
+        String pwTest = loginRequestBody.getPw();
+        String tokenTest = loginRequestBody.getRegistration_token();
+
+        //debug
+        Log.i("login test", "email: " + emailTest + " pw: " + pwTest + " token: " + tokenTest);
+
+        Log.i("firebase token", FirebaseInstanceId.getInstance().getToken());
+        Call<LoginResponseBody> call = networkService.signin(loginRequestBody);
+        call.enqueue(new Callback<LoginResponseBody>() {
+            @Override
+            public void onResponse(Call<LoginResponseBody> call, Response<LoginResponseBody> response) {
+                loginInterface.Login(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 
     private String getHashCodeFromString(String str) throws NoSuchAlgorithmException {

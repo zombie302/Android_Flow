@@ -4,6 +4,11 @@ public class ResponseBody {
     private String status;
     private String message;
 
+    public ResponseBody(String status, String message) {
+        this.status = status;
+        this.message = message;
+    }
+
     public String getStatus() {
         return status;
     }

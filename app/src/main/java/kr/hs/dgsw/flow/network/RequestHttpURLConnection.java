@@ -1,5 +1,6 @@
 package kr.hs.dgsw.flow.network;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -7,8 +8,12 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import kr.hs.dgsw.flow.GoOutInterface;
 import kr.hs.dgsw.flow.LoginInterface;
 import kr.hs.dgsw.flow.RegisterInterface;
+import kr.hs.dgsw.flow.network.Model.Databases;
+import kr.hs.dgsw.flow.network.Model.GoOutModel.GoOutRequestBody;
+import kr.hs.dgsw.flow.network.Model.GoOutModel.GoOutResponseBody;
 import kr.hs.dgsw.flow.network.Model.LoginModel.LoginRequestBody;
 import kr.hs.dgsw.flow.network.Model.LoginModel.LoginResponseBody;
 import kr.hs.dgsw.flow.network.Model.RegisterModel.RegisterRequestBody;
@@ -24,14 +29,16 @@ public class RequestHttpURLConnection {
 
     private Retrofit retrofit;
     private NetworkService networkService;
+    private Context context;
 
-    public RequestHttpURLConnection() {
+    public RequestHttpURLConnection(Context context) {
         retrofit = new Retrofit.Builder()
                 .baseUrl(urlStr)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         networkService = retrofit.create(NetworkService.class);
+        this.context = context;
     }
 
     public void signup(String email, String pw, String name, String gender, String mobile, String class_idx, String class_number, final RegisterInterface registerInterface){
@@ -65,22 +72,10 @@ public class RequestHttpURLConnection {
             e.printStackTrace();
         }
 
-        //Log.i("login pw", pw);
+        Log.i("token", FirebaseInstanceId.getInstance().getToken());
 
         LoginRequestBody loginRequestBody = new LoginRequestBody(email, pw, FirebaseInstanceId.getInstance().getToken());
 
-
-        //debug
-        Log.i("login test", email + pw);
-
-        String emailTest = loginRequestBody.getEmail();
-        String pwTest = loginRequestBody.getPw();
-        String tokenTest = loginRequestBody.getRegistration_token();
-
-        //debug
-        Log.i("login test", "email: " + emailTest + " pw: " + pwTest + " token: " + tokenTest);
-
-        Log.i("firebase token", FirebaseInstanceId.getInstance().getToken());
         Call<LoginResponseBody> call = networkService.signin(loginRequestBody);
         call.enqueue(new Callback<LoginResponseBody>() {
             @Override
@@ -91,6 +86,24 @@ public class RequestHttpURLConnection {
             @Override
             public void onFailure(Call<LoginResponseBody> call, Throwable t) {
 
+            }
+        });
+    }
+
+    public void goOut(String start, String end, String reason, final GoOutInterface goOutInterface){
+        Databases db = new Databases(context);
+        GoOutRequestBody goOutRequestBody = new GoOutRequestBody(start, end, reason);
+
+        Call<GoOutResponseBody> call = networkService.goOut(db.searchLastToken().getToken(), goOutRequestBody);
+        call.enqueue(new Callback<GoOutResponseBody>() {
+            @Override
+            public void onResponse(Call<GoOutResponseBody> call, Response<GoOutResponseBody> response) {
+                goOutInterface.goOut(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<GoOutResponseBody> call, Throwable t) {
+                Log.i("fail", "실패");
             }
         });
     }

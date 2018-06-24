@@ -1,20 +1,45 @@
 package kr.hs.dgsw.flow.network.Model.GoOutModel;
 
-import kr.hs.dgsw.flow.network.Model.ResponseBody;
+public class GoOutResponseBody{
+    private int status;
+    private String message;
+    private ResponseData data;
 
-public class GoOutResponseBody extends ResponseBody{
-    private ResponseData responseData;
+    public GoOutResponseBody(int status, String message, ResponseData responseData) {
+        this.status = status;
+        this.message = message;
+        this.data = responseData;
+    }
 
-    public GoOutResponseBody(String status, String message, ResponseData responseData) {
-        super(status, message);
-        this.responseData = responseData;
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public ResponseData getData() {
+        return data;
+    }
+
+    public void setData(ResponseData data) {
+        this.data = data;
     }
 
     public ResponseData getResponseData() {
-        return responseData;
+        return data;
     }
 
     public void setResponseData(ResponseData responseData) {
-        this.responseData = responseData;
+        this.data = responseData;
     }
 }

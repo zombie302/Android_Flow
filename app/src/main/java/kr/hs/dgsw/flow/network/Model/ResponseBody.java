@@ -1,19 +1,19 @@
 package kr.hs.dgsw.flow.network.Model;
 
 public class ResponseBody {
-    private String status;
+    private int status;
     private String message;
 
-    public ResponseBody(String status, String message) {
+    public ResponseBody(int status, String message) {
         this.status = status;
         this.message = message;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

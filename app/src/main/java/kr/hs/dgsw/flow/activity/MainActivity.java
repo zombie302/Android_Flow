@@ -29,4 +29,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent= new Intent(MainActivity.this,LoginActivity.class);
         startActivity(intent);
     }
+
+    public void onClickBtnGoToGoOut(View v){
+        Intent intent= new Intent(MainActivity.this,GoOutActivity.class);
+        startActivity(intent);
+    }
 }

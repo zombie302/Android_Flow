@@ -49,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
             return;
         }
 
-        RequestHttpURLConnection rhu = new RequestHttpURLConnection();
+        RequestHttpURLConnection rhu = new RequestHttpURLConnection(this);
         rhu.signup(
                 et_email.getText().toString(),
                 et_password.getText().toString(),

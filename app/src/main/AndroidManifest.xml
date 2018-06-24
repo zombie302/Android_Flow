@@ -36,6 +36,12 @@
         <activity android:name=".activity.GoOutAndSleepDocActivity">
 
         </activity>
+        <activity android:name=".activity.NoticeActivity">
+
+        </activity>
+        <activity android:name=".activity.NoticeDetailActivity">
+
+        </activity>
 
         <service
             android:name=".network.FMCPushMessage.MyFirebaseMessaging">

@@ -19,7 +19,9 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import kr.hs.dgsw.flow.R;
+import kr.hs.dgsw.flow.activity.GoOutAndSleepDocActivity;
 import kr.hs.dgsw.flow.activity.MainActivity;
+import kr.hs.dgsw.flow.network.Model.FirebaseDataModel;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
 
@@ -54,7 +56,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            sendNotification(remoteMessage.getNotification());
+            sendNotification(remoteMessage.getNotification(), (FirebaseDataModel) remoteMessage.getData());
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -74,8 +76,16 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
      *
      * @param notification FCM message body received.
      */
-    private void sendNotification(RemoteMessage.Notification notification) {
-        Intent intent = new Intent(this, MainActivity.class);
+    private void sendNotification(RemoteMessage.Notification notification, FirebaseDataModel firebaseDataModel) {
+        Intent intent;
+        if(firebaseDataModel.getType().equals("go_out")){
+            intent = new Intent(this, GoOutAndSleepDocActivity.class);
+        } else if(firebaseDataModel.getType().equals("sleep_out")){
+            intent = new Intent(this, GoOutAndSleepDocActivity.class);
+        } else {
+            intent = new Intent(this, MainActivity.class);
+        }
+
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);

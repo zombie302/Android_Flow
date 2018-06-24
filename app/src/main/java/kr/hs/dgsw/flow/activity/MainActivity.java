@@ -34,4 +34,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent= new Intent(MainActivity.this,GoOutActivity.class);
         startActivity(intent);
     }
+
+    public void onClickBtnGoToNotice(View v){
+        Intent intent= new Intent(MainActivity.this,NoticeActivity.class);
+        startActivity(intent);
+    }
 }
